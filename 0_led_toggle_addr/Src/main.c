@@ -26,46 +26,47 @@
  * Address offset: 0x14
  * */
 
-#define PERIPHERAL_BASE   (0x40000000UL)
+#define PERIPHERAL_BASE (0x40000000UL)
 
-#define AHB2_OFFSET       (0x8000000UL)
-#define GPIOE_OFFSET      (0x1000UL)
-#define GPIOE_BASE        (PERIPHERAL_BASE + AHB2_OFFSET + GPIOE_OFFSET)
+#define AHB2_OFFSET (0x8000000UL)
+#define GPIOE_OFFSET (0x1000UL)
+#define GPIOE_BASE (PERIPHERAL_BASE + AHB2_OFFSET + GPIOE_OFFSET)
 
-#define AHB1_OFFSET       (0x20000UL)
-#define RCC_OFFSET		  (0x1000UL)
-#define RCC_BASE          (PERIPHERAL_BASE + AHB1_OFFSET + RCC_OFFSET)
+#define AHB1_OFFSET (0x20000UL)
+#define RCC_OFFSET (0x1000UL)
+#define RCC_BASE (PERIPHERAL_BASE + AHB1_OFFSET + RCC_OFFSET)
 
 #define RCC_AHBENR_OFFSET (0x14UL)
-#define RCC_AHBENR        (*(volatile unsigned int *)(RCC_BASE + RCC_AHBENR_OFFSET))
+#define RCC_AHBENR (*(volatile unsigned int *)(RCC_BASE + RCC_AHBENR_OFFSET))
 
-#define MODER_OFFSET      (0x00UL)
-#define GPIOE_MODER       (*(volatile unsigned int *)(GPIOE_BASE + MODER_OFFSET))
+#define MODER_OFFSET (0x00UL)
+#define GPIOE_MODER (*(volatile unsigned int *)(GPIOE_BASE + MODER_OFFSET))
 
-#define GPIO_ODR_OFFSET   (0x14UL)
-#define GPIOE_ODR         (*(volatile unsigned int *)(GPIOE_BASE + GPIO_ODR_OFFSET))
+#define GPIO_ODR_OFFSET (0x14UL)
+#define GPIOE_ODR (*(volatile unsigned int *)(GPIOE_BASE + GPIO_ODR_OFFSET))
 
-#define IOPEEN            (1U<<21)
+#define IOPEEN (1U << 21)
 
-#define PIN9              (1U<<9)
-#define LD3_PIN            PIN9
+#define PIN9 (1U << 9)
+#define LD3_PIN PIN9
 
 int main(void)
 {
     /* Enable clock access to GPIOE */
-    RCC_AHBENR  |= IOPEEN;
+    RCC_AHBENR |= IOPEEN;
 
     /* Set PE9 as output pin */
-    GPIOE_MODER |=  (1U<<18);  // Set bit 10 to 1
-    GPIOE_MODER &= ~(1U<<19); // Set bit 11 to 0
+    GPIOE_MODER |= (1U << 18);  // Set bit 10 to 1
+    GPIOE_MODER &= ~(1U << 19); // Set bit 11 to 0
 
-    while(1)
+    while (1)
     {
         /* Set PE9 high */
-        //GPIOE_ODR |= LD3_PIN;
+        // GPIOE_ODR |= LD3_PIN;
 
-        /* Toggle PE9 instead */
+        /* Blink PE9 instead */
         GPIOE_ODR ^= LD3_PIN;
-        for(int i = 0; i < 1000000; i++);
+        for (int i = 0; i < 1000000; i++)
+            ;
     }
 }
